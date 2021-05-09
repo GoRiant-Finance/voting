@@ -1,0 +1,11 @@
+{
+    "dependencies": {
+        "@project-serum/anchor": "*",
+        "@project-serum/common": "*",
+        "@project-serum/serum": "*",
+        "@solana/spl-token": "*"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}
