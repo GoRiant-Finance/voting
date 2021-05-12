@@ -14,7 +14,7 @@ pub mod voting_app {
     }
 
     impl VoteState {
-        pub fn new(ctx: Context<Initialize>, proposals: Box<[String]>) -> Result<Self> {
+        pub fn new(ctx: Context<Initialize>, proposals: Vec<String>) -> Result<Self> {
             Ok(Self {
                 owner: *ctx.accounts.owner.key,
                 is_open: true,
@@ -27,7 +27,7 @@ pub mod voting_app {
         }
 
         pub fn vote(&mut self, ctx: Context<Vote>, proposal_name: String) -> Result<()>{
-            if self.is_open == false {
+            if !self.is_open {
                 return Err(ErrorCode::VotingClosed.into())
             }
             let voter = ctx.accounts.voter.key;
@@ -37,8 +37,7 @@ pub mod voting_app {
                 None => {
                     if let Some(pro) = self.proposals.get_mut(&*proposal_name) {
                         *pro += 1;
-                        self.voters.insert(voter.clone(), proposal_name);
-                        ()
+                        self.voters.insert(*voter, proposal_name);
                     }
                     Err(ErrorCode::InvalidVote.into())
                 }
